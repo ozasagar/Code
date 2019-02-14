@@ -1,0 +1,102 @@
+/* Author @Sagar Oza Source @LeetCode
+
+31. Next Permutation
+
+Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+
+The replacement must be in-place and use only constant extra memory.
+
+Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+
+1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1
+
+*/
+class Solution {
+    public void nextPermutation(int[] nums) {
+        if(nums == null || nums.length == 0 || nums.length == 1)
+            return;
+        
+        int prev = nums[nums.length-1];;
+        int cur = 0;
+        int swapIndex = 0;
+        int swapDigit = 0;
+        int rightMinIndex = 0;
+        int i;
+        
+        for(i = nums.length-2;i>=0;i--){
+            cur = nums[i];
+            if(cur < prev){
+                swapIndex = i;
+                swapDigit = cur;
+                rightMinIndex = minDigit(nums,i+1);
+                System.out.println("MinIndex: " + rightMinIndex);
+                swap(nums,swapIndex,rightMinIndex);
+                for(int j = 0;j<nums.length;j++)
+                    System.out.print(nums[j] + " ");
+                System.out.println();
+                sortRight(nums,swapIndex+1);
+                for(int k = 0;k<nums.length;k++)
+                    System.out.print(nums[k] + " ");
+                System.out.println();
+                break;
+            }
+            prev = cur;
+        }
+        
+        if(i < 0){
+            System.out.println("Found array to sort");
+            sortRight(nums,0);
+        }
+    }
+    
+    public int minDigit(int[] nums, int start){
+        int min = nums[start];
+        int minIndex = start;
+        
+        for(int i=start+1;i<nums.length;i++){
+            if(nums[i]<min && nums[i]>nums[start-1]){
+                min = nums[i];
+                minIndex = i;
+            }
+        }
+        
+        return minIndex;
+    }
+    
+    public void swap(int[] nums, int swapDigit, int rightMin){
+        
+        int temp = nums[swapDigit];
+        nums[swapDigit] = nums[rightMin];
+        nums[rightMin] = temp;
+    }
+    
+    public void sortRight(int[] nums, int index){
+        
+        if(index == nums.length-1)
+            return;
+        
+        if(index == 0){
+            Arrays.sort(nums);
+            return;
+        }
+        
+        int[] sortNums = new int [nums.length - index];
+        
+        int k = 0;
+        for(int i = index;i<nums.length;i++){
+            sortNums[k] = nums[i];
+            k++;
+        }
+        
+        Arrays.sort(sortNums);
+        int i = index;
+        for(int j = 0;j<sortNums.length;j++){
+            nums[i] = sortNums[j];
+            i++;
+        }
+    }
+}

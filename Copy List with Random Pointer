@@ -1,0 +1,52 @@
+/*
+@Source - LeetCode - 138. Copy List with Random Pointer
+@Author - Sagar Oza
+*/
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node next;
+    public Node random;
+
+    public Node() {}
+
+    public Node(int _val,Node _next,Node _random) {
+        val = _val;
+        next = _next;
+        random = _random;
+    }
+};
+*/
+class Solution {
+    public Node copyRandomList(Node head) {
+        
+        //list is empty
+        if(head == null)
+            return head;
+        
+        //Maintain copy of list in map
+        Map<Node,Node> map = new HashMap<>();
+        
+        Node temp = head;
+        //Map original Node and its copy
+        while(temp != null){
+            map.put(temp, new Node(temp.val,null,null));
+            temp = temp.next;
+        }
+        
+        temp = head;
+        //Map next and random pointer
+        while(temp != null){
+            map.get(temp).next = map.get(temp.next);
+            map.get(temp).random = map.get(temp.random);
+            temp = temp.next;
+        }
+        
+        //return head of copy list
+        return map.get(head);
+    }
+}
+
+/* Time Complexity - O(n)
+Space Complexity - O(n) */
